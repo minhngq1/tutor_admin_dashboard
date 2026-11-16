@@ -4,14 +4,6 @@ using System.Windows.Forms;
 
 namespace Giasu123.Pages
 {
-    /// <summary>
-    /// ClassesPage — manages the "classes" table.
-    /// Columns: class_id, subject, grade, fee, tutor_id.
-    ///
-    /// New idea here: a class belongs to a tutor (tutor_id). Instead of making the
-    /// user type a tutor number, we show a drop-down of tutor names. This is a
-    /// "foreign key" — a link to a row in another table.
-    /// </summary>
     public class ClassesPage : CrudPage
     {
         private TextBox _subject = null!;
@@ -24,8 +16,6 @@ namespace Giasu123.Pages
 
         protected override DataTable LoadData(string search)
         {
-            // We join to tutors so the grid can show the tutor's NAME, but we also
-            // keep tutor_id so the edit panel knows which tutor is selected.
             string sql =
                 "SELECT c.class_id, c.subject, c.grade, c.fee, c.tutor_id, t.name AS tutor " +
                 "FROM classes c LEFT JOIN tutors t ON t.tutor_id = c.tutor_id ";
@@ -38,7 +28,6 @@ namespace Giasu123.Pages
                 Database.P("q", "%" + search + "%"));
         }
 
-        // Hide the raw tutor_id column in the grid — the friendly "tutor" name is enough.
         protected override void AfterBind()
         {
             if (Grid.Columns.Contains("tutor_id"))
@@ -52,7 +41,6 @@ namespace Giasu123.Pages
             _fee     = AddNumberField("Fee", 0, 10_000_000);
             _tutor   = AddComboField("Tutor");
 
-            // Fill the tutor drop-down. Note the columns are aliased to id/label.
             LoadLookup(_tutor, "SELECT tutor_id AS id, name AS label FROM tutors ORDER BY name");
         }
 
@@ -74,7 +62,6 @@ namespace Giasu123.Pages
 
         protected override void Save()
         {
-            // The combo gives us the tutor_id of whatever name the user picked.
             object tutorId = _tutor.SelectedValue ?? (object)DBNull.Value;
 
             if (Current == null)

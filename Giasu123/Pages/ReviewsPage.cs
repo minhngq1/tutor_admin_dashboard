@@ -4,11 +4,6 @@ using System.Windows.Forms;
 
 namespace Giasu123.Pages
 {
-    /// <summary>
-    /// ReviewsPage — manages the "reviews" table.
-    /// Columns: review_id, tutor_id, student_id, rating (1–5), comment, review_date.
-    /// The database enforces rating between 1 and 5, so our spinner matches that.
-    /// </summary>
     public class ReviewsPage : CrudPage
     {
         private ComboBox _tutor = null!;

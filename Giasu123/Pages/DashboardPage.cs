@@ -5,11 +5,6 @@ using System.Windows.Forms;
 
 namespace Giasu123.Pages
 {
-    /// <summary>
-    /// DashboardPage — the welcome screen. It shows a quick overview of the business:
-    /// a row of "stat cards" (totals) and a table of the most recent payments.
-    /// It only READS data, so it's simpler than the CRUD pages.
-    /// </summary>
     public class DashboardPage : UserControl
     {
         private readonly FlowLayoutPanel _cards;
@@ -30,7 +25,6 @@ namespace Giasu123.Pages
                 Height = 48
             };
 
-            // A row of coloured summary cards that wraps if the window is small.
             _cards = new FlowLayoutPanel
             {
                 Dock = DockStyle.Top,
@@ -55,7 +49,6 @@ namespace Giasu123.Pages
             Theme.StyleGrid(_recent);
             recentCard.Controls.Add(_recent);
 
-            // Add in reverse order so the docking stacks the way we want.
             Controls.Add(recentCard);
             Controls.Add(recentLabel);
             Controls.Add(_cards);
@@ -68,7 +61,6 @@ namespace Giasu123.Pages
         {
             try
             {
-                // Each card: a title, a big number, and a colour.
                 AddCard("Tutors", Count("SELECT COUNT(*) FROM tutors"), Theme.Accent);
                 AddCard("Students", Count("SELECT COUNT(*) FROM students"), Color.FromArgb(14, 165, 233));
                 AddCard("Classes", Count("SELECT COUNT(*) FROM classes"), Color.FromArgb(168, 85, 247));
@@ -96,7 +88,6 @@ namespace Giasu123.Pages
             }
         }
 
-        // Build one coloured stat card and add it to the row.
         private void AddCard(string caption, string value, Color color)
         {
             var card = new Panel
@@ -134,7 +125,6 @@ namespace Giasu123.Pages
             _cards.Controls.Add(card);
         }
 
-        // Small helpers to read a single value and format it nicely.
         private static string Count(string sql) => Convert.ToInt64(Database.Scalar(sql)).ToString("N0");
         private static string Money(string sql) => Convert.ToInt64(Database.Scalar(sql)).ToString("N0") + " đ";
         private static string Decimal1(string sql) => Convert.ToDecimal(Database.Scalar(sql)).ToString("0.0");

@@ -4,11 +4,6 @@ using System.Windows.Forms;
 
 namespace Giasu123.Pages
 {
-    /// <summary>
-    /// PaymentsPage — manages the "payments" table.
-    /// Columns: payment_id, enrollment_id, amount, payment_date, method, status.
-    /// A payment is linked to an enrollment (which student+class was paid for).
-    /// </summary>
     public class PaymentsPage : CrudPage
     {
         private ComboBox _enrollment = null!;
@@ -45,7 +40,6 @@ namespace Giasu123.Pages
             _status     = AddComboField("Status");
             _date       = AddDateField("Payment date");
 
-            // Show each enrollment as "#id - student name" so it's recognisable.
             LoadLookup(_enrollment,
                 "SELECT e.enrollment_id AS id, ('#' || e.enrollment_id || ' - ' || COALESCE(s.name,'?')) AS label " +
                 "FROM enrollments e LEFT JOIN students s ON s.student_id = e.student_id ORDER BY e.enrollment_id");

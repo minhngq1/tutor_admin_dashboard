@@ -4,11 +4,6 @@ using System.Windows.Forms;
 
 namespace Giasu123.Pages
 {
-    /// <summary>
-    /// EnrollmentsPage — manages the "enrollments" table (which student joined which class).
-    /// Columns: enrollment_id, student_id, class_id, enroll_date, status.
-    /// Two foreign keys here: a student AND a class, so two drop-downs.
-    /// </summary>
     public class EnrollmentsPage : CrudPage
     {
         private ComboBox _student = null!;
@@ -54,7 +49,6 @@ namespace Giasu123.Pages
             LoadLookup(_class,
                 "SELECT class_id AS id, (subject || ' - ' || grade) AS label FROM classes ORDER BY subject");
 
-            // The status choices are fixed text, so we just list them directly.
             _status.Items.AddRange(new object[] { "active", "completed", "cancelled" });
         }
 

@@ -3,10 +3,6 @@ using System.Windows.Forms;
 
 namespace Giasu123.Pages
 {
-    /// <summary>
-    /// StudentsPage — manages the "students" table.
-    /// Same recipe as TutorsPage. Columns: student_id, name, grade, city.
-    /// </summary>
     public class StudentsPage : CrudPage
     {
         private TextBox _name = null!;

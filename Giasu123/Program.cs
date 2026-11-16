@@ -2,16 +2,12 @@ namespace Giasu123
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application — this runs first when you start the app.
-        /// </summary>
+        /// <summary>Application entry point</summary>
         [STAThread]
         static void Main()
         {
             ApplicationConfiguration.Initialize();
 
-            // Before showing the window, check we can actually reach the database.
-            // If not, show a friendly message instead of a confusing crash later.
             string? error = Database.TestConnection();
             if (error != null)
             {
@@ -22,10 +18,9 @@ namespace Giasu123
                     "Database connection failed",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                return; // stop the app; nothing will work without the database
+                return;
             }
 
-            // All good — open the main window.
             Application.Run(new MainForm());
         }
     }

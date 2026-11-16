@@ -6,18 +6,10 @@ using Giasu123.Pages;
 
 namespace Giasu123
 {
-    /// <summary>
-    /// MainForm — the main window. It has two parts:
-    ///   1) a dark SIDEBAR on the left with navigation buttons
-    ///   2) a CONTENT area on the right that shows the selected page
-    ///
-    /// Clicking a sidebar button swaps which page is shown in the content area.
-    /// Each page is created once and then re-used (cached) to keep things fast.
-    /// </summary>
     public class MainForm : Form
     {
-        private readonly Panel _content;                 // where the current page is shown
-        private readonly Panel _sidebar;                 // the dark left menu
+        private readonly Panel _content;
+        private readonly Panel _sidebar;
         private readonly List<Button> _navButtons = new();
         private readonly Dictionary<string, UserControl> _pageCache = new();
         private readonly Dictionary<string, Func<UserControl>> _factories = new();
@@ -31,10 +23,8 @@ namespace Giasu123
             BackColor = Theme.Background;
             Font = Theme.FontBody;
 
-            // ----- Content area (fills the space to the right of the sidebar) -----
             _content = new Panel { Dock = DockStyle.Fill, BackColor = Theme.Background };
 
-            // ----- Sidebar -----
             _sidebar = new Panel { Dock = DockStyle.Left, Width = 220, BackColor = Theme.Sidebar };
 
             var brand = new Label
@@ -57,8 +47,6 @@ namespace Giasu123
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
-            // The nav buttons are added top-down. We add them in REVERSE here because
-            // DockStyle.Top stacks the most-recently-added control at the top.
             AddNav("Reviews", () => new ReviewsPage());
             AddNav("Payments", () => new PaymentsPage());
             AddNav("Enrollments", () => new EnrollmentsPage());
@@ -70,18 +58,13 @@ namespace Giasu123
             _sidebar.Controls.Add(subtitle);
             _sidebar.Controls.Add(brand);
 
-            // Add content first, then sidebar, so the sidebar sits on the left edge.
             Controls.Add(_content);
             Controls.Add(_sidebar);
 
-            // Open on the Dashboard by default (it's the first button in the list).
-            Navigate(_navButtons[^1]); // ^1 = last added = "Dashboard"
+            Navigate(_navButtons[^1]);
         }
 
-        /// <summary>
-        /// Create one sidebar navigation button. "factory" is a little function that
-        /// builds the page when it's first needed (so we don't build all pages upfront).
-        /// </summary>
+        /// <summary>Create one sidebar navigation button</summary>
         private void AddNav(string name, Func<UserControl> factory)
         {
             var btn = new Button
@@ -101,21 +84,18 @@ namespace Giasu123
             btn.FlatAppearance.MouseOverBackColor = Theme.SidebarHover;
             btn.Click += (_, _) => Navigate(btn);
 
-            _factories[name] = factory; // remember how to build this page when needed
+            _factories[name] = factory;
             _sidebar.Controls.Add(btn);
             _navButtons.Add(btn);
         }
 
-        // Show the page for the given button and highlight it as the active one.
         private void Navigate(Button btn)
         {
             string name = (string)btn.Tag!;
 
-            // Build the page the first time it's shown, then reuse it afterwards.
             if (!_pageCache.ContainsKey(name))
                 _pageCache[name] = _factories[name]();
 
-            // Highlight: active button gets the accent colour, the rest go back to normal.
             foreach (var b in _navButtons)
             {
                 bool active = b == btn;
@@ -124,7 +104,6 @@ namespace Giasu123
                 b.Font = new Font("Segoe UI", 11f, active ? FontStyle.Bold : FontStyle.Regular);
             }
 
-            // Swap the visible page.
             _content.Controls.Clear();
             _content.Controls.Add(_pageCache[name]);
         }

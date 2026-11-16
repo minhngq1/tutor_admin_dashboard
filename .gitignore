@@ -12,3 +12,7 @@ obj/
 # OS files
 Thumbs.db
 .DS_Store
+
+# Markdown docs / tutorials (kept local, not pushed) — except README.md
+*.md
+!README.md
